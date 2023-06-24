@@ -1,0 +1,155 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  #overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+</style>
+<br />
+<div >
+    <h3>Biometric Login Creation</h3>
+    <p class="lead">Let your face be your login!</p>
+    <p>To use this, you must grant access to the web browser to use your camera. Please be in a well lit area, where you are the only face in the picture.</p>
+    <p>Look straight at the camera with a neutral expression. The closer to the camera the better.</p>
+    <p>When you are happy, click "capture my biometric data" and we will store that information for future logins.</p>
+    <p><b>NOTE: Please notice the accuracy percent around your face.  It needs to be 95% or better.</b></p>
+</div>
+<br />
+ <div style="position: relative">
+      <video onloadedmetadata="onPlay(this)" id="inputVideo" autoplay muted playsinline></video>
+      <canvas id="overlay" class="canvas" />
+ </div>
+<br />
+<div><input type="button" class="btn btn-default" id="capture" value="Capture my Biometric Data" /></div>
+
+{% endblock %}
+
+{% block scripts %}
+   <script defer src="{% static 'app/scripts/face-api.js' %}"></script>
+   <script>
+       let forwardTimes = []
+
+       const SSD_MOBILENETV1 = 'ssd_mobilenetv1'
+       const TINY_FACE_DETECTOR = 'tiny_face_detector'
+
+       let selectedFaceDetector = SSD_MOBILENETV1
+
+       // ssd_mobilenetv1 options
+       let minConfidence = 0.5
+
+       // tiny_face_detector options
+       let inputSize = 512
+       let scoreThreshold = 0.5
+
+       function isFaceDetectionModelLoaded() {
+           return !!getCurrentFaceDetectionNet().params
+       }
+
+       function getCurrentFaceDetectionNet() {
+           if (selectedFaceDetector === SSD_MOBILENETV1) {
+               return faceapi.nets.ssdMobilenetv1
+           }
+           if (selectedFaceDetector === TINY_FACE_DETECTOR) {
+               return faceapi.nets.tinyFaceDetector
+           }
+       }
+
+       async function changeFaceDetector(detector) {
+           if (!isFaceDetectionModelLoaded()) {
+               await getCurrentFaceDetectionNet().load('/static/app/weights');
+               await faceapi.loadFaceLandmarkModel('/static/app/weights');
+               await faceapi.loadFaceRecognitionModel('/static/app/weights');
+           }
+       }
+
+       function getFaceDetectorOptions() {
+           return selectedFaceDetector === SSD_MOBILENETV1
+               ? new faceapi.SsdMobilenetv1Options({ minConfidence })
+               : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+       }
+
+       async function onPlay() {
+           const videoEl = $('#inputVideo').get(0)
+           const capture = document.getElementById("capture");
+
+           var w = videoEl.offsetWidth;
+           var h = videoEl.offsetHeight;
+           var cv = document.getElementById("overlay");
+           cv.width = w;
+           cv.height = h;
+
+           if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+               return setTimeout(() => onPlay())
+
+           const options = getFaceDetectorOptions()
+
+           const ts = Date.now()
+
+           const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks()
+
+
+           if (result) {
+               const canvas = $('#overlay').get(0)
+               const dims = faceapi.matchDimensions(canvas, videoEl, true)
+               const resizedResult = faceapi.resizeResults(result, dims)
+
+               faceapi.draw.drawDetections(canvas, resizedResult)
+               faceapi.draw.drawFaceLandmarks(canvas, resizedResult)
+           }
+
+           setTimeout(() => onPlay())
+       }
+
+       async function run() {
+           // load face detection model
+           await changeFaceDetector('tiny_face_detector')
+
+           // try to access users webcam and stream the images
+           // to the video element
+           const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+           const videoEl = $('#inputVideo').get(0)
+           videoEl.srcObject = stream
+       }
+
+       function updateResults() { }
+
+       $(document).ready(function () {
+           run()
+       })
+
+       var button = document.getElementById("capture");
+       button.addEventListener("click", async function (event) {
+           const videoEl = $('#inputVideo').get(0)
+           const options = getFaceDetectorOptions()
+           const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks().withFaceDescriptor();
+
+           fetch('/setbiometric/', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'X-CSRFToken': '{{ csrf_token }}'
+               },
+               body: JSON.stringify({ 'face_vector': result })
+           })
+               .then((response) => {
+                   if (response.status == 200) { 
+                       alert('your face has been saved!')
+                   }
+                   if (response.status == 406) {
+                       alert('Please try again, the confidence level was too low.  Perhaps get closer to the camera and look straight on.')
+                   } 
+            })
+            .catch(error => {
+                alert("Error: " + error.message);
+            });               
+       });
+
+   </script>
+{% endblock %}
+
+  

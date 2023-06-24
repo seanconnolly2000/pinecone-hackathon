@@ -1,0 +1,144 @@
+{% load static %}
+<style>
+  #overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+</style>
+<br />
+<div >
+    <h3>Biometric Login </h3>
+    <p>Please be in a well lit area, where you are the only face in the picture.</p>
+    <p>Look straight at the camera with a neutral expression. The closer to the camera the better.</p>
+</div>
+<div><input type="button" class="btn btn-default" id="capture" value="Login" /></div>
+ <div style="position: relative">
+      <video onloadedmetadata="onPlay(this)" id="inputVideo" autoplay muted playsinline></video>
+      <canvas id="overlay" class="canvas" />
+ </div>
+{% block scripts %}
+   <script defer src="{% static 'app/scripts/face-api.js' %}"></script>
+   <script>
+       let forwardTimes = []
+
+       const SSD_MOBILENETV1 = 'ssd_mobilenetv1'
+       const TINY_FACE_DETECTOR = 'tiny_face_detector'
+
+       let selectedFaceDetector = SSD_MOBILENETV1
+
+       // ssd_mobilenetv1 options
+       let minConfidence = 0.5
+
+       // tiny_face_detector options
+       let inputSize = 512
+       let scoreThreshold = 0.5
+
+       function isFaceDetectionModelLoaded() {
+           return !!getCurrentFaceDetectionNet().params
+       }
+
+       function getCurrentFaceDetectionNet() {
+           if (selectedFaceDetector === SSD_MOBILENETV1) {
+               return faceapi.nets.ssdMobilenetv1
+           }
+           if (selectedFaceDetector === TINY_FACE_DETECTOR) {
+               return faceapi.nets.tinyFaceDetector
+           }
+       }
+
+       async function changeFaceDetector(detector) {
+           if (!isFaceDetectionModelLoaded()) {
+               await getCurrentFaceDetectionNet().load('/static/app/weights');
+               await faceapi.loadFaceLandmarkModel('/static/app/weights');
+               await faceapi.loadFaceRecognitionModel('/static/app/weights');
+           }
+       }
+
+       function getFaceDetectorOptions() {
+           return selectedFaceDetector === SSD_MOBILENETV1
+               ? new faceapi.SsdMobilenetv1Options({ minConfidence })
+               : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+       }
+
+       async function onPlay() {
+           const videoEl = $('#inputVideo').get(0)
+           const capture = document.getElementById("capture");
+
+           var w = videoEl.offsetWidth;
+           var h = videoEl.offsetHeight;
+           var cv = document.getElementById("overlay");
+           cv.width = w;
+           cv.height = h;
+
+           if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+               return setTimeout(() => onPlay())
+
+
+           const options = getFaceDetectorOptions()
+
+           const ts = Date.now()
+
+           const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks()
+
+
+           if (result) {
+               const canvas = $('#overlay').get(0)
+               const dims = faceapi.matchDimensions(canvas, videoEl, true)
+               const resizedResult = faceapi.resizeResults(result, dims)
+
+               faceapi.draw.drawDetections(canvas, resizedResult)
+               faceapi.draw.drawFaceLandmarks(canvas, resizedResult)
+           }
+
+           setTimeout(() => onPlay())
+       }
+
+       async function run() {
+           // load face detection model
+           await changeFaceDetector('tiny_face_detector')
+
+           // try to access users webcam and stream the images
+           // to the video element
+           const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+           const videoEl = $('#inputVideo').get(0)
+           videoEl.srcObject = stream
+       }
+
+       function updateResults() { }
+
+       window.addEventListener('load', function () {
+           run()
+       })
+
+       var button = document.getElementById("capture");
+       button.addEventListener("click", async function (event) {
+           const videoEl = $('#inputVideo').get(0)
+           const options = getFaceDetectorOptions()
+           const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks().withFaceDescriptor();
+
+           fetch('/getbiometric/', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'X-CSRFToken': '{{ csrf_token }}'
+               },
+               body: JSON.stringify({ 'face_vector': result })
+           })
+               .then((response) => {
+                   if (response.status == 200) { 
+                       window.location.href = "/";
+                   }
+                   if (response.status == 403) {
+                       alert('Login Unsuccessful. Perhaps get closer and look straight at the camera. If the problem persists, login with your credentials.')
+                   } 
+            })
+            .catch(error => {
+                alert("Error: " + error.message);
+            });               
+
+       });
+   </script>
+{% endblock %}
+  

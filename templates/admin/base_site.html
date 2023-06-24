@@ -1,0 +1,15 @@
+{% extends 'admin/base_site.html' %}
+
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Tiburon Sharks Site Admin') }}{% endblock %}
+
+{% block branding %}
+    <div class="head">
+        <h1 id="name">Tiburon Sharks Admin Dashboard</h1>
+    </div>
+{% endblock %}
+
+{% block nav-global %}
+    <img class="brand_img" src="{% static '/app/tiburon.svg'%}" width="50" height="50" alt="logo">
+{% endblock %}
