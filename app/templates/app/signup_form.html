@@ -1,5 +1,5 @@
 {% extends "app/layout.html" %}
-
+    {% load static %}
 
 {% block content %}
   <h2>Sign up</h2>
@@ -22,9 +22,6 @@
 {% endblock %}
 
 {% block scripts %}
-
-    {% load static %}
-<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
-
+    <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
 {% endblock %}
 

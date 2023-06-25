@@ -1,20 +1,18 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
+    <h2>{{ title }}.</h2>
+    <h3>{{ message }}</h3>
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+    <address>
+        XX Main Street<br />
+        Tiburon, CA 94920<br />
+        <abbr title="Phone">P:</abbr>
+        415.555.1212
+    </address>
 
-<address>
-    14 Main Street<br />
-    Tiburon, CA 94920<br />
-    <abbr title="Phone">P:</abbr>
-    415.601.9669
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:sean@broadworld.com">sean@broadworld.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:bubberducky@gmail.com">bubberducky@gmail.com</a>
-</address>
-
+    <address>
+        <strong>Support:</strong>   <a href="mailto:sean@fakeemail.com">sean@fakeemail.com</a><br />
+        <strong>Marketing:</strong> <a href="mailto:kincaid@fakeemail.com">kincaid@fakeemail.com</a>
+    </address>
 {% endblock %}

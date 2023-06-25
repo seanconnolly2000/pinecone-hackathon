@@ -1,14 +1,13 @@
 {% extends "app/layout.html" %}
 {% load static %}
-
 {% block content %}
 <style>
   #overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
 </style>
 <br />
 <div >
@@ -87,11 +86,8 @@
                return setTimeout(() => onPlay())
 
            const options = getFaceDetectorOptions()
-
            const ts = Date.now()
-
            const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks()
-
 
            if (result) {
                const canvas = $('#overlay').get(0)
@@ -101,7 +97,6 @@
                faceapi.draw.drawDetections(canvas, resizedResult)
                faceapi.draw.drawFaceLandmarks(canvas, resizedResult)
            }
-
            setTimeout(() => onPlay())
        }
 
@@ -141,7 +136,7 @@
                        alert('your face has been saved!')
                    }
                    if (response.status == 406) {
-                       alert('Please try again, the confidence level was too low.  Perhaps get closer to the camera and look straight on.')
+                       alert('Please try again, the confidence level was too low.  Perhaps get closer and look straight at the camera.')
                    } 
             })
             .catch(error => {

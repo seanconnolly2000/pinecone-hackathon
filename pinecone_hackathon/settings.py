@@ -74,9 +74,9 @@ DATABASES = {
     "default": {
         "ENGINE": "mssql",
         "NAME": "pinecone",
-        "USER": 'PINECONE',
-        "PASSWORD": 'PINECONE',
-        "HOST": 'localhost',
+        "USER": os.environ.get("SQL_USERNAME"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD"),
+        "HOST": os.environ.get("SQL_SERVER_HOST"),
         "PORT": "",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
         },

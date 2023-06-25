@@ -1,83 +1,82 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
-<br />
-
-{% if user.is_authenticated %}
-  {% include 'app/access.html' %}
-  {% include 'app/chatbot.html' %}
-    <div class="card">
-          <div class="card_container">
-              <h2>Judge's Guidance</h2>
-              <br />
-              FYI: The ChatBot to the right is DRAGGABLE - please move it to read this. :-)<br />
-              Based upon the role you logged in as, you will have access to different functions (which control data sources) shown the tiles above (APIs,Vector Databases, SQL Databases).  
-              ChatCompletion will determine what functions it needs to execute to answer your question based upon the Access Control List of functions for your <b>role</b>.
-              If you are using a SQL database call, ChatCompletion is creating the SELECT statement based upon the data table schema it is being supplied! Due to this, we occasionally
-              see "I don't have access to data" issues when ChatCompletion gets the SQL incorrect.  Incorrect SQL statements are logged in DocumentDB for analysis and tweaking of table structures (for instance,
-              introducing a SQL View to simplify complex table joins).
-              <br />
-              ChatCompletion/Pinecone/SQL:  Please feel free to ask questions like:
-              <ul>
-                  <li>What is my name and what time is it? (internal getUTC function)</li>
-                  <li>What will the weather be in San Francisco tomorrow? (WeatherAPI)</li>
-                  <li>Please give me news on the US Economy (NewsAPI)</li>
-                  <li>Are eye glasses covered in my Northwinds Standard Benefits Plan? (Pinecone)</li>
-                  <li>What were our sales in 2018? (SQL sales role)</li>
-                  <li>What are the departments within our company? (Sql HR Role, However, ChatGPT may try to get a distinct list from sales - it's pretty resourceful!)</li>
-                  <li>After you ask a question above, you can say, "please email that information to me (or specify an email address!)" You'll see the information appear in your email! (Sendgrid email API)</li>
-              </ul>
-          </div>
+     <br />
+    {% if user.is_authenticated %}
+      {% include 'app/access.html' %}
+      {% include 'app/chatbot.html' %}
+        <div class="card">
+              <div class="card_container">
+                  <h2>Judge's Guidance</h2>
+                  <br />
+                  FYI: The ChatBot to the right is DRAGGABLE - please move it to read this. :-)<br />
+                  Based upon the role you logged in as, you will have access to different functions (which control data sources) shown the tiles above (APIs,Vector Databases, SQL Databases).  
+                  ChatCompletion will determine what functions it needs to execute to answer your question based upon the Access Control List of functions for your <b>role</b>.
+                  If you are using a SQL database call, ChatCompletion is creating the SELECT statement based upon the data table schema it is being supplied! Due to this, we occasionally
+                  see "I don't have access to data" issues when ChatCompletion gets the SQL incorrect.  Incorrect SQL statements are logged in DocumentDB for analysis and tweaking of table structures (for instance,
+                  introducing a SQL View to simplify complex table joins).
+                  <br />
+                  ChatCompletion/Pinecone/SQL:  Please feel free to ask questions like:
+                  <ul>
+                      <li>What is my name and what time is it? (internal getUTC function)</li>
+                      <li>What will the weather be in San Francisco tomorrow? (WeatherAPI)</li>
+                      <li>Please give me news on the US Economy (NewsAPI)</li>
+                      <li>Are eye glasses covered in my Northwinds Standard Benefits Plan? (Pinecone)</li>
+                      <li>What were our sales in 2018? (SQL sales role)</li>
+                      <li>What are the departments within our company? (Sql HR Role, However, ChatGPT may try to get a distinct list from sales - it's pretty resourceful!)</li>
+                      <li>After you ask a question above, you can say, "please email that information to me (or specify an email address!)" You'll see the information appear in your email! (Sendgrid email API)</li>
+                  </ul>
+              </div>
+            <br />
+            <h2>Biometric Login Setup</h2>
+            While you're here, don't forget to set yourself up with <b>Biometric Login</b>.  Please click on "Biometric Login Setup" on the navbar and then click your picture!  
+            Your biometrics gets stored in Pinecone and Pinecone's cosine similarity matching determines if you'll be allowed in when you next login! 
+            <b>IMPORTANT NOTE:</b> If you are using a demo account (rather than one you signed up for), and you UPSERT your biometrics, you will overwrite others.  Please use only an account that you created.
+        </div>
+    {% else %}
         <br />
-        <h2>Biometric Login Setup</h2>
-        While you're here, don't forget to set yourself up with <b>Biometric Login</b>.  Please click on "Biometric Login Setup" on the navbar and then click your picture!  
-        Your biometrics gets stored in Pinecone and Pinecone's cosine similarity matching determines if you'll be allowed in when you next login! 
-        <b>IMPORTANT NOTE:</b> If you are using a demo account (rather than one you signed up for), and you UPSERT your biometrics, you will overwrite others.  Please use only an account that you created.
-    </div>
-{% else %}
-<br />
-<div class="card">
-  <div class="card_container">
-    <h2>Welcome</h2>
-        Welcome to the future of corporate intranet information and security! Our cutting-edge solution that leverages the power of chatGPT, vector databases, advanced APIs, and SQL Servers to transform the way you access and manage your corporate data.
-     <ul>
-    <li>Implementing <b>Pinecone Vector Database</b> for <b>natural language matching</b> of relevant employee healthcare topics.</li>
-    <li>Utilizing Pinecone Vector Database for mission critical <b>biometric facial recognition login security</b>, requiring cosine similarity "score" of 99%.</li>
-    <li>Leveraging the incredible power of <b>OpenAI's ChatCompletion "function_call" chaining</b>, enabling an LLM to make multiple calls, seamlessly retrieving information from a wide range of corporate data sources.</li>
-    <li><b>OpenAI SQL Translation:</b> By providing ChatCompletion with a data schema, we leverage ChatCompletion's ability to generate SQL to mine corporate data.</li>
-    <li><b>Role Based Data Access:</b> Assign roles to a user to determine which data silos that user has access to.</li>
-    <li>Using <b>HuggingFace</b> for sentence transformer and facial recognition models</li>
-    <li>Deploying the entire platform on <b>AWS infrastructure</b> for high availability - web Servers, SQL database for corporate data, and DocumentDB for logging.</li>
-</ul>
-<br />
-Welcome to the future of data access and security. Transform your corporate information sharing with the power of AI.
-  </div>
-</div>
-<br />
-<div class="row">
-    <div class="col-md-3">
-        <h2><img src="/static/app/pinecone.svg" style="width:125px" /></h2>
-        <p>
-           Use the power of a Pinecone vector database to enable biometric facial recognition as well as full text searches of your healthcare information.   
-        </p>
-        <p><a class="btn btn-default" href="https://www.pinecone.io">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-3">
-        <h2><img src="/static/app/openai.png" style="width:125px" /></h2>
-        <p>OpenAI enables natural language conversations with your data.</p>
-        <p><a class="btn btn-default" href="https://www.openai.com/">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-3">
-        <h2><img src="/static/app/aws.png" style="width:75px" /></h2>
-        <p>AWS stores SQL and DocumentDB logs securely.  Your financial, HR, product and manufacturing database is stored in SQL.  Your chat logs are stored in DocumentDB.</p>
-        <p><a class="btn btn-default" href="http://www.aws.com">Learn more &raquo;</a></p>
-    </div>
-     <div class="col-md-3">
-        <h2><img src="/static/app/huggingface.png" style="width:125px" /></h2>
-        <p>Powerful models for your AI projects.  In this case, your healthcare documents were chunked and embedded, and your queries are matched using HuggingFace's <b>all-MiniLM-L6-v2</b> models as well as facial recognition models.</p>
-        <p><a class="btn btn-default" href="http://www.huggingface.co">Learn more &raquo;</a></p>
-    </div>
-</div>
-{% endif %}
+        <div class="card">
+          <div class="card_container">
+            <h2>Welcome</h2>
+                Welcome to the future of corporate intranet information and security! Our cutting-edge solution that leverages the power of chatGPT, vector databases, advanced APIs, and SQL Servers to transform the way you access and manage your corporate data.
+             <ul>
+            <li>Implementing <b>Pinecone Vector Database</b> for <b>natural language matching</b> of relevant employee healthcare topics.</li>
+            <li>Utilizing Pinecone Vector Database for mission critical <b>biometric facial recognition login security</b>, requiring cosine similarity "score" of 99%.</li>
+            <li>Leveraging the incredible power of <b>OpenAI's ChatCompletion "function_call" chaining</b>, enabling an LLM to make multiple calls, seamlessly retrieving information from a wide range of corporate data sources.</li>
+            <li><b>OpenAI SQL Translation:</b> By providing ChatCompletion with a data schema, we leverage ChatCompletion's ability to generate SQL to mine corporate data.</li>
+            <li><b>Role Based Data Access:</b> Assign roles to a user to determine which data silos that user has access to.</li>
+            <li>Using <b>HuggingFace</b> for sentence transformer and facial recognition models</li>
+            <li>Deploying the entire platform on <b>AWS infrastructure</b> for high availability - web Servers, SQL database for corporate data, and DocumentDB for logging.</li>
+        </ul>
+        <br />
+        Welcome to the future of data access and security. Transform your corporate information sharing with the power of AI.
+          </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <h2><img src="/static/app/pinecone.svg" style="width:125px" /></h2>
+                <p>
+                   Use the power of a Pinecone vector database to enable biometric facial recognition as well as full text searches of your healthcare information.   
+                </p>
+                <p><a class="btn btn-default" href="https://www.pinecone.io">Learn more &raquo;</a></p>
+            </div>
+            <div class="col-md-3">
+                <h2><img src="/static/app/openai.png" style="width:125px" /></h2>
+                <p>OpenAI enables natural language conversations with your data.</p>
+                <p><a class="btn btn-default" href="https://www.openai.com/">Learn more &raquo;</a></p>
+            </div>
+            <div class="col-md-3">
+                <h2><img src="/static/app/aws.png" style="width:75px" /></h2>
+                <p>AWS stores SQL and DocumentDB logs securely.  Your financial, HR, product and manufacturing database is stored in SQL.  Your chat logs are stored in DocumentDB.</p>
+                <p><a class="btn btn-default" href="http://www.aws.com">Learn more &raquo;</a></p>
+            </div>
+             <div class="col-md-3">
+                <h2><img src="/static/app/huggingface.png" style="width:125px" /></h2>
+                <p>Powerful models for your AI projects.  In this case, your healthcare documents were chunked and embedded, and your queries are matched using HuggingFace's <b>all-MiniLM-L6-v2</b> models as well as facial recognition models.</p>
+                <p><a class="btn btn-default" href="http://www.huggingface.co">Learn more &raquo;</a></p>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}

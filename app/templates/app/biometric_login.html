@@ -1,11 +1,11 @@
 {% load static %}
 <style>
   #overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
 </style>
 <br />
 <div >
@@ -75,13 +75,9 @@
            if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
                return setTimeout(() => onPlay())
 
-
            const options = getFaceDetectorOptions()
-
            const ts = Date.now()
-
            const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks()
-
 
            if (result) {
                const canvas = $('#overlay').get(0)

@@ -1,77 +1,73 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
     .order-card {
-    color: #fff;
-}
+        color: #fff;
+    }
 
-.bg-c-blue {
-    background: linear-gradient(45deg,#4099ff,#73b4ff);
-}
+    .bg-c-blue {
+        background: linear-gradient(45deg,#4099ff,#73b4ff);
+    }
 
-.bg-c-green {
-    background: linear-gradient(45deg,#2ed8b6,#59e0c5);
-}
+    .bg-c-green {
+        background: linear-gradient(45deg,#2ed8b6,#59e0c5);
+    }
 
-.bg-c-yellow {
-    background: linear-gradient(45deg,#FFB64D,#ffcb80);
-}
+    .bg-c-yellow {
+        background: linear-gradient(45deg,#FFB64D,#ffcb80);
+    }
 
-.bg-c-pink {
-    background: linear-gradient(45deg,#FF5370,#ff869a);
-}
-.bg-c-purple {
-    background: linear-gradient(45deg,#9c27b0,#d05ce3);
-}
+    .bg-c-pink {
+        background: linear-gradient(45deg,#FF5370,#ff869a);
+    }
+    .bg-c-purple {
+        background: linear-gradient(45deg,#9c27b0,#d05ce3);
+    }
 
-.bg-c-orange {
-    background: linear-gradient(45deg,#ff9800,#ffc947);
-}
+    .bg-c-orange {
+        background: linear-gradient(45deg,#ff9800,#ffc947);
+    }
 
-.bg-c-red {
-    background: linear-gradient(45deg,#e53935,#ff6f60);
-}
+    .bg-c-red {
+        background: linear-gradient(45deg,#e53935,#ff6f60);
+    }
 
-.bg-c-teal {
-    background: linear-gradient(45deg,#009688,#52c7b8);
-}
+    .bg-c-teal {
+        background: linear-gradient(45deg,#009688,#52c7b8);
+    }
 
-.bg-c-indigo {
-    background: linear-gradient(45deg,#3f51b5,#7384d6);
-}
+    .bg-c-indigo {
+        background: linear-gradient(45deg,#3f51b5,#7384d6);
+    }
 
-.bg-c-gray {
-    background: linear-gradient(45deg,#757575,#c4c4c4);
-}
+    .bg-c-gray {
+        background: linear-gradient(45deg,#757575,#c4c4c4);
+    }
 
+    .card {
+        border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+        box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+        border: none;
+        margin-bottom: 30px;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
 
+    .card .card-block {
+        padding: 25px;
+    }
 
-.card {
-    border-radius: 5px;
-    -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
-    box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
-    border: none;
-    margin-bottom: 30px;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
+    .order-card i {
+        font-size: 26px;
+    }
 
-.card .card-block {
-    padding: 25px;
-}
+    .f-left {
+        float: left;
+    }
 
-.order-card i {
-    font-size: 26px;
-}
-
-.f-left {
-    float: left;
-}
-
-.f-right {
-    float: right;
-}
-
-
+    .f-right {
+        float: right;
+    }
 </style>
 <div class="container">
     <p>{{ user.first_name }}, you have access to the following database being in the following groups:
@@ -88,8 +84,6 @@
                         </div>
                     </div>
                 </div>
-
-
             {% if forloop.counter|divisibleby:3 %}
         </div>
         <div class="row">
