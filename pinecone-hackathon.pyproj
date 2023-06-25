@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
-    <Folder Include="app\functions\certs\" />
     <Folder Include="app\migrations\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
@@ -76,7 +75,6 @@
     <Folder Include="pinecone_hackathon\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\functions\certs\us-west-2-bundle.pem" />
     <Content Include="app\static\app\aws.png" />
     <Content Include="app\static\app\huggingface.png" />
     <Content Include="app\static\app\newsapi.png" />

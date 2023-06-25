@@ -170,9 +170,9 @@ def query_sql_data(tables, **kwargs)->str:
          msg = ''
          if hasattr(e, 'message'):
               msg = e.message
-         db = MongoDatabase()
-         log = sql_error_log(sql)
-         db.insert("sql_error_log", {'prompt': prompt, 'sql': sql, 'error': msg, 'created' : round(time.time() * 1000), 'modified' : round(time.time() * 1000)})
+         #db = MongoDatabase()
+         #log = sql_error_log(sql)
+         #db.insert("sql_error_log", {'prompt': prompt, 'sql': sql, 'error': msg, 'created' : round(time.time() * 1000), 'modified' : round(time.time() * 1000)})
          print(sql)
          return "I'm sorry, I was unable to translate your request into SQL."
 
