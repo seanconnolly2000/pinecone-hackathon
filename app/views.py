@@ -37,9 +37,9 @@ def home(request):
         # When a authenticated user enters the home page, reset the chat
         request.session['messages'] = []
 
-        groups = []
-        for g in request.user.groups.all():
-            groups.append(g)
+    groups = []
+    for g in request.user.groups.all():
+        groups.append(g)
 
     return render(
         request,
@@ -142,7 +142,7 @@ def get_biometric_security(request):
 
     # NEED TO TEST BOTH SCORE RETURNING AND THIS SCORE ABOVE
     username, score = get_biometric_vector(vector)
-    if score > .97:
+    if score > .95:
         user = User.objects.get(username=username)
          #manually set the backend attribute
         user.backend = 'django.contrib.auth.backends.ModelBackend'
