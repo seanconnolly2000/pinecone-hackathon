@@ -13,8 +13,6 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
 
-
-#class SignupForm(forms.Form):
 class SignupForm(UserCreationForm):
     username = forms.CharField(label="User Name", max_length=254, required=True,
                                widget=forms.TextInput({
@@ -41,12 +39,7 @@ class SignupForm(UserCreationForm):
                                widget=forms.TextInput({
                                    'class': 'form-control',
                                    'placeholder': 'Email'}))
-    
-    #class Meta:
-    #    model = User
-    #    fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
-
-    
+     
 class LoginForm(forms.Form):
     username = forms.CharField(label="username", max_length=254, required=True,
                                widget=forms.TextInput({

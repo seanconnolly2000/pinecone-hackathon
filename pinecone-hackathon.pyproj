@@ -48,7 +48,6 @@
     <Compile Include="app\functions\openaif.py" />
     <Compile Include="app\functions\calls.py" />
     <Compile Include="app\functions\sql_schema.py" />
-    <Compile Include="main.py" />
     <Compile Include="manage.py" />
     <Compile Include="pinecone_hackathon\__init__.py" />
     <Compile Include="pinecone_hackathon\settings.py" />
