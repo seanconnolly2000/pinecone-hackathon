@@ -103,6 +103,9 @@ def user_signup(request):
             user = form.save(commit=False)
             username = form.cleaned_data.get('username')
             user.set_password(form.cleaned_data['password1'])
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.email = form.cleaned_data.get('email')
             user.save()
             user = authenticate(username=username, password=form.cleaned_data['password1'])
             if user is not None:
